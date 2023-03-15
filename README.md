@@ -1,1 +1,1 @@
-# ratings-calculator
+# ratings-simulator
