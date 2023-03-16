@@ -5,8 +5,8 @@ export function getIntegerInputValue(inputValue: string) {
   return isNaN(newValue) ? 0 : newValue;
 }
 
-const reduceSum = (acc: number, count: number) => acc + count;
-const reduceSumRating = (acc: number, count: number, index: number) =>
+export const reduceSum = (acc: number, count: number) => acc + count;
+export const reduceSumRating = (acc: number, count: number, index: number) =>
   acc + count * (index + 1);
 
 export function getChartData(
