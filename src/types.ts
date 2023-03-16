@@ -1,4 +1,16 @@
+export type Ratings = [number, number, number, number, number];
+
 export type RatingsFormData = {
-  ratings: [number, number, number, number, number];
-  prospectiveRatings: [number, number, number, number, number];
+  ratings: Ratings;
+  prospectiveRatings: Ratings;
+};
+
+export type SimulationResult = {
+  combinedRatings: Ratings;
+  ratingCount: number;
+  combinedRatingCount: number;
+  ratingsPercentage: number;
+  combinedRatingsPercentage: number;
+  averageRating: number;
+  averageProspectiveRating: number;
 };

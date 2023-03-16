@@ -6,36 +6,70 @@ import { RatingsFormData } from './types';
 
 import Star from './assets/star.svg';
 
-import './App.css';
 import StackedBarChart from './components/StackedBarChart/StackedBarChart';
 import Card from './components/Card/Card';
+import { calculateSimulation, getChartData } from './helpers';
+
+import './App.css';
 
 const MAU_POOL = 200000;
 
-const reduceSum = (acc: number, count: number) => acc + count;
-const reduceSumRating = (acc: number, count: number, index: number) =>
-  acc + count * (index + 1);
+function renderDatasetLabel(label: string) {
+  const stars = parseInt(label);
+  return (
+    <div className="flex flex-row pt-[4px] justify-end opacity-40">
+      {[...Array(stars).keys()].map((i) => (
+        <img key={i} width={15} src={Star} alt="star" />
+      ))}
+    </div>
+  );
+}
+
+const initialFormData: RatingsFormData = {
+  ratings: [150, 290, 5, 30, 30],
+  prospectiveRatings: [0, 0, 0, 30, 1000],
+};
 
 export default function App() {
-  const [formData, setFormData] = useState<RatingsFormData>({
-    ratings: [150, 290, 5, 30, 30],
-    prospectiveRatings: [0, 0, 0, 30, 1000],
-  });
+  const [formData, setFormData] = useState<RatingsFormData>(initialFormData);
 
-  const combinedRatings = formData.ratings.map(
-    (rating, index) => rating + formData.prospectiveRatings[index]
-  );
+  const simulationResult = calculateSimulation(formData, MAU_POOL);
 
-  const ratingCount = formData.ratings.reduce(reduceSum, 0);
-  const combinedRatingCount = combinedRatings.reduce(reduceSum, 0);
+  const {
+    averageRating,
+    ratingCount,
+    averageProspectiveRating,
+    combinedRatingCount,
+  } = simulationResult;
 
-  // const ratingsPercentage = ratingCount / MAU_POOL;
-  // const combinedRatingsPercentage = combinedRatingCount / MAU_POOL;
+  const {
+    ratingsDistribution,
+    remainsDistribution,
+    decreaseDistribution,
+    increaseDistribution,
+  } = getChartData(formData, simulationResult);
 
-  const averageRating =
-    formData.ratings.reduce(reduceSumRating, 0) / ratingCount;
-  const averageProspectiveRating =
-    combinedRatings.reduce(reduceSumRating, 0) / combinedRatingCount;
+  const originalDatasets = ratingsDistribution.map((value, index) => ({
+    label: `${index + 1} stars`,
+    value: [{ color: 'blue', value, label: '' }],
+  }));
+
+  const prospectiveDatasets = remainsDistribution.map((value, index) => ({
+    label: `${index + 1} stars`,
+    value: [
+      { color: 'blue', value, label: 'Remains' },
+      {
+        color: 'red',
+        value: decreaseDistribution[index],
+        label: 'Decrease',
+      },
+      {
+        color: 'green',
+        value: increaseDistribution[index],
+        label: 'Increase',
+      },
+    ],
+  }));
 
   return (
     <div className="p-10">
@@ -49,13 +83,19 @@ export default function App() {
             <strong className="text-3xl">
               {numeral(averageRating).format('0.0')}
             </strong>{' '}
-            <span className="text-xs text-gray-600">out of 5</span>
+            <span className="text-xs text-gray-500">out of 5</span>
           </div>
           <div className="flex w-full sm:w-1/5">
-            <span className="text-sm text-gray-600">{ratingCount} Reviews</span>
+            <span className="text-sm text-gray-500">{ratingCount} Reviews</span>
           </div>
           <div className="w-full sm:w-3/5">
-            <StackedBarChart />
+            <StackedBarChart
+              options={{
+                label: '',
+                datasets: [...originalDatasets].reverse(),
+                renderDatasetLabel,
+              }}
+            />
           </div>
         </div>
       </Card>
@@ -65,13 +105,21 @@ export default function App() {
             <strong className="text-3xl">
               {numeral(averageProspectiveRating).format('0.0')}
             </strong>{' '}
-            <span className="text-xs text-gray-600">out of 5</span>
+            <span className="text-xs text-gray-500">out of 5</span>
           </div>
           <div className="flex w-full sm:w-1/5">
-            <span className="text-sm text-gray-600">{ratingCount} Reviews</span>
+            <span className="text-sm text-gray-500">
+              {numeral(combinedRatingCount).format('0,0')} Reviews
+            </span>
           </div>
           <div className="w-full sm:w-3/5">
-            <StackedBarChart />
+            <StackedBarChart
+              options={{
+                label: '',
+                datasets: [...prospectiveDatasets].reverse(),
+                renderDatasetLabel,
+              }}
+            />
           </div>
         </div>
       </Card>
