@@ -81,12 +81,26 @@ export default function App() {
         value: [{ color: 'slate', value, label: 'Remains' }],
       }));
 
+  const ResetButton = () => (
+    <button
+      onClick={() => {
+        setFormData({
+          ratings: [0, 0, 0, 0, 0],
+          prospectiveRatings: [0, 0, 0, 0, 0],
+        });
+      }}
+      className="bg-white border-gray-200 text-sm hover:border-gray-300 border-2 ml-auto mb-2 text-gray-500 hover:text-gray-600 p-1 pl-3 pr-3 rounded-lg"
+    >
+      Reset
+    </button>
+  );
+
   return (
     <div className="flex flex-col p-5 sm:p-10">
       <h1 className="text-3xl font-bold mb-10">Qvik App Ratings Simulator</h1>
       <p className="mb-6">
         This tool allows you to explore the possible changes in an app's rating
-        based on acquiring more prospective reviews. Enter the existing reviews
+        based on acquiring more prospective ratings. Enter the existing ratings
         in to the first column, then use the second column to add the number of
         new, prospective ratings to see how the distribution and average of
         ratings changes.{' '}
@@ -104,59 +118,74 @@ export default function App() {
         {/* {' '}
         and TODO: next post */}
       </p>
-      <div className={'mb-6 max-w-md'}>
+      <div className={'flex flex-col mb-2 max-w-[420px]'}>
         <RatingsForm
           ratingCount={ratingCount}
           prospectiveRatingCount={prospectiveRatingCount}
           formData={formData}
           setFormData={setFormData}
         />
+        <ResetButton />
       </div>
-      <Card title={'Original Reviews'}>
-        <div className="flex items-end flex-col sm:flex-row">
-          <div className="flex items-baseline gap-1 w-full sm:w-1/5">
-            <strong className="text-3xl">
-              {numeral(averageRating).format('0.0')}
-            </strong>{' '}
-            <span className="text-xs text-gray-500">out of 5</span>
+      <Card title={'Original Ratings'}>
+        {!ratingCount ? (
+          <p className="text-gray-500 text-center">
+            Enter at least one rating to preview.
+          </p>
+        ) : (
+          <div className="flex items-end flex-col sm:flex-row">
+            <div className="flex items-baseline gap-1 w-full sm:w-1/5">
+              <strong className="text-3xl">
+                {numeral(averageRating).format('0.0')}
+              </strong>{' '}
+              <span className="text-xs text-gray-500">out of 5</span>
+            </div>
+            <div className="flex w-full sm:w-1/5">
+              <span className="text-sm text-gray-500">
+                {numeral(ratingCount).format('0,0')} ratings
+              </span>
+            </div>
+            <div className="w-full sm:w-3/5">
+              <StackedBarChart
+                options={{
+                  label: '',
+                  datasets: [...originalDatasets].reverse(),
+                  renderDatasetLabel,
+                }}
+              />
+            </div>
           </div>
-          <div className="flex w-full sm:w-1/5">
-            <span className="text-sm text-gray-500">{ratingCount} Reviews</span>
-          </div>
-          <div className="w-full sm:w-3/5">
-            <StackedBarChart
-              options={{
-                label: '',
-                datasets: [...originalDatasets].reverse(),
-                renderDatasetLabel,
-              }}
-            />
-          </div>
-        </div>
+        )}
       </Card>
-      <Card title={'Prospective Reviews'}>
-        <div className="flex items-end flex-col sm:flex-row">
-          <div className="flex items-baseline gap-1 w-full sm:w-1/5">
-            <strong className="text-3xl">
-              {numeral(averageProspectiveRating).format('0.0')}
-            </strong>{' '}
-            <span className="text-xs text-gray-500">out of 5</span>
+      <Card title={'Prospective Ratings'}>
+        {!prospectiveRatingCount ? (
+          <p className="text-gray-500 text-center">
+            Enter at least one prospective rating to preview.
+          </p>
+        ) : (
+          <div className="flex items-end flex-col sm:flex-row">
+            <div className="flex items-baseline gap-1 w-full sm:w-1/5">
+              <strong className="text-3xl">
+                {numeral(averageProspectiveRating).format('0.0')}
+              </strong>{' '}
+              <span className="text-xs text-gray-500">out of 5</span>
+            </div>
+            <div className="flex w-full sm:w-1/5">
+              <span className="text-sm text-gray-500">
+                {numeral(combinedRatingCount).format('0,0')} ratings
+              </span>
+            </div>
+            <div className="w-full sm:w-3/5">
+              <StackedBarChart
+                options={{
+                  label: '',
+                  datasets: [...prospectiveDatasets].reverse(),
+                  renderDatasetLabel,
+                }}
+              />
+            </div>
           </div>
-          <div className="flex w-full sm:w-1/5">
-            <span className="text-sm text-gray-500">
-              {numeral(combinedRatingCount).format('0,0')} Reviews
-            </span>
-          </div>
-          <div className="w-full sm:w-3/5">
-            <StackedBarChart
-              options={{
-                label: '',
-                datasets: [...prospectiveDatasets].reverse(),
-                renderDatasetLabel,
-              }}
-            />
-          </div>
-        </div>
+        )}
       </Card>
       <div className="flex basis-auto items-center justify-center pt-10">
         <a className="inline" href="https://qvik.com" target={'_blank'}>

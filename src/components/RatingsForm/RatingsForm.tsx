@@ -43,8 +43,8 @@ export default function RatingsForm({
   };
 
   return (
-    <div className={'max-w-lg'}>
-      <table className="table-auto text-right">
+    <div>
+      <table className="table-auto w-full text-right">
         <thead>
           <tr>
             <th style={{ width: '25%' }}>&nbsp;</th>
