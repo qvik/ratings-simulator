@@ -18,7 +18,7 @@ const MAU_POOL = 200000;
 function renderDatasetLabel(label: string) {
   const stars = parseInt(label);
   return (
-    <div className="flex flex-row pt-[4px] justify-end opacity-40">
+    <div className="flex flex-row pt-[4px] justify-end">
       {[...Array(stars).keys()].map((i) => (
         <img key={i} width={15} src={Star} alt="star" />
       ))}
@@ -84,6 +84,26 @@ export default function App() {
   return (
     <div className="flex flex-col p-5 sm:p-10">
       <h1 className="text-3xl font-bold mb-10">Qvik App Ratings Simulator</h1>
+      <p className="mb-6">
+        This tool allows you to explore the possible changes in an app's rating
+        based on acquiring more prospective reviews. Enter the existing reviews
+        in to the first column, then use the second column to add the number of
+        new, prospective ratings to see how the distribution and average of
+        ratings changes.{' '}
+      </p>
+      <p className="mb-6">
+        Read more about how you activate users to leave positive ratings from
+        Qvik blog:{' '}
+        <a
+          className="underline"
+          href="https://qvik.com/news/how-many-stars-does-your-app-have/"
+          target={'_blank'}
+        >
+          How many stars does your app have?
+        </a>
+        {/* {' '}
+        and TODO: next post */}
+      </p>
       <div className={'mb-6 max-w-md'}>
         <RatingsForm
           ratingCount={ratingCount}
