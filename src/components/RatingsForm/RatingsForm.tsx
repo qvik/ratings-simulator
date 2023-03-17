@@ -1,3 +1,4 @@
+import numeral from 'numeral';
 import { Dispatch, InputHTMLAttributes, SetStateAction } from 'react';
 import { getIntegerInputValue } from '../../helpers';
 import { RatingsFormData } from '../../types';
@@ -8,7 +9,7 @@ function NumberInput(props: NumberInputProps) {
   return (
     <input
       type="text"
-      className="border-cyan text-right w-full focus:outline-none border-b focus:border-b-black"
+      className="border-cyan text-right w-[100px] focus:outline-none border rounded-sm p-1 pr-2 focus:border-gray-600"
       {...props}
     />
   );
@@ -16,11 +17,15 @@ function NumberInput(props: NumberInputProps) {
 
 type RatingsFormProps = {
   formData: RatingsFormData;
+  ratingCount: number;
+  prospectiveRatingCount: number;
   setFormData: Dispatch<SetStateAction<RatingsFormData>>;
 };
 
 export default function RatingsForm({
   formData,
+  ratingCount,
+  prospectiveRatingCount,
   setFormData,
 }: RatingsFormProps) {
   const handleInputChange = (
@@ -43,26 +48,32 @@ export default function RatingsForm({
         <thead>
           <tr>
             <th style={{ width: '25%' }}>&nbsp;</th>
-            <th className="font-normal">Ratings</th>
-            <th className="font-normal">Propspective Ratings</th>
+            <th className="text-gray-500 p-2 font-normal">Ratings</th>
+            <th className="text-gray-500 p-2 font-normal">
+              Prospective Ratings
+            </th>
           </tr>
         </thead>
         <tbody>
-          {[1, 2, 3, 4, 5].map((starCount, rowIndex) => {
+          {[5, 4, 3, 2, 1].map((starCount) => {
             return (
-              <tr key={String(rowIndex)}>
-                <td>{starCount} Star</td>
+              <tr key={String(starCount)}>
+                <th className="text-gray-500 font-normal" scope="row">
+                  {starCount} Star
+                </th>
                 <td>
                   <NumberInput
-                    value={formData.ratings[rowIndex]}
-                    onChange={(e) => handleInputChange(e, 'ratings', rowIndex)}
+                    value={formData.ratings[starCount - 1]}
+                    onChange={(e) =>
+                      handleInputChange(e, 'ratings', starCount - 1)
+                    }
                   />
                 </td>
                 <td>
                   <NumberInput
-                    value={formData.prospectiveRatings[rowIndex]}
+                    value={formData.prospectiveRatings[starCount - 1]}
                     onChange={(e) =>
-                      handleInputChange(e, 'prospectiveRatings', rowIndex)
+                      handleInputChange(e, 'prospectiveRatings', starCount - 1)
                     }
                   />
                 </td>
@@ -70,6 +81,15 @@ export default function RatingsForm({
             );
           })}
         </tbody>
+        <tfoot>
+          <tr>
+            <th className="text-gray-500 font-normal">Total ratings</th>
+            <td className="p-2">{numeral(ratingCount).format('0,0')}</td>
+            <td className="p-2">
+              {numeral(prospectiveRatingCount).format('0,0')}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

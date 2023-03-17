@@ -4,6 +4,7 @@ import { useState } from 'react';
 import RatingsForm from './components/RatingsForm/RatingsForm';
 import { RatingsFormData } from './types';
 
+import Logo from './assets/qvik-logo.svg';
 import Star from './assets/star.svg';
 
 import StackedBarChart from './components/StackedBarChart/StackedBarChart';
@@ -30,6 +31,8 @@ const initialFormData: RatingsFormData = {
   prospectiveRatings: [0, 0, 0, 30, 1000],
 };
 
+const SHOW_COLOR_CODING = false;
+
 export default function App() {
   const [formData, setFormData] = useState<RatingsFormData>(initialFormData);
 
@@ -38,6 +41,7 @@ export default function App() {
   const {
     averageRating,
     ratingCount,
+    prospectiveRatingCount,
     averageProspectiveRating,
     combinedRatingCount,
   } = simulationResult;
@@ -45,37 +49,48 @@ export default function App() {
   const {
     ratingsDistribution,
     remainsDistribution,
+    combinedRatingsDistribution,
     decreaseDistribution,
     increaseDistribution,
   } = getChartData(formData, simulationResult);
 
   const originalDatasets = ratingsDistribution.map((value, index) => ({
     label: `${index + 1} stars`,
-    value: [{ color: 'blue', value, label: '' }],
+    value: [{ color: 'slate', value, label: '' }],
   }));
 
-  const prospectiveDatasets = remainsDistribution.map((value, index) => ({
-    label: `${index + 1} stars`,
-    value: [
-      { color: 'blue', value, label: 'Remains' },
-      {
-        color: 'red',
-        value: decreaseDistribution[index],
-        label: 'Decrease',
-      },
-      {
-        color: 'green',
-        value: increaseDistribution[index],
-        label: 'Increase',
-      },
-    ],
-  }));
+  const prospectiveDatasets = SHOW_COLOR_CODING
+    ? remainsDistribution.map((value, index) => ({
+        label: `${index + 1} stars`,
+        value: [
+          { color: 'slate', value, label: 'Remains' },
+          {
+            color: 'red',
+            value: decreaseDistribution[index],
+            label: 'Decrease',
+          },
+          {
+            color: 'green',
+            value: increaseDistribution[index],
+            label: 'Increase',
+          },
+        ],
+      }))
+    : combinedRatingsDistribution.map((value, index) => ({
+        label: `${index + 1} stars`,
+        value: [{ color: 'slate', value, label: 'Remains' }],
+      }));
 
   return (
-    <div className="p-10">
-      <h1 className="text-3xl mb-10">Ratings Simulator</h1>
+    <div className="flex flex-col p-5 sm:p-10">
+      <h1 className="text-3xl font-bold mb-10">Qvik App Ratings Simulator</h1>
       <div className={'mb-6 max-w-md'}>
-        <RatingsForm formData={formData} setFormData={setFormData} />
+        <RatingsForm
+          ratingCount={ratingCount}
+          prospectiveRatingCount={prospectiveRatingCount}
+          formData={formData}
+          setFormData={setFormData}
+        />
       </div>
       <Card title={'Original Reviews'}>
         <div className="flex items-end flex-col sm:flex-row">
@@ -123,6 +138,11 @@ export default function App() {
           </div>
         </div>
       </Card>
+      <div className="flex basis-auto items-center justify-center pt-10">
+        <a className="inline" href="https://qvik.com" target={'_blank'}>
+          <img src={Logo} alt="Qvik" />
+        </a>
+      </div>
     </div>
   );
 }

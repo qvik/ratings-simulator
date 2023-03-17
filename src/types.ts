@@ -8,6 +8,7 @@ export type RatingsFormData = {
 export type SimulationResult = {
   combinedRatings: Ratings;
   ratingCount: number;
+  prospectiveRatingCount: number;
   combinedRatingCount: number;
   ratingsPercentage: number;
   combinedRatingsPercentage: number;

@@ -4,7 +4,7 @@ type ColorMapping = Record<Color, string>;
 
 // any color here should be added to the tailwind config safelist as well
 export const colorToThemeMapping: ColorMapping = {
-  slate: 'bg-slate-600',
+  slate: 'bg-slate-400',
   gray: 'bg-gray-400',
   red: 'bg-red-400',
   green: 'bg-green-400',

@@ -51,6 +51,7 @@ export function calculateSimulation(
   ) as Ratings;
 
   const ratingCount = inputs.ratings.reduce(reduceSum, 0);
+  const prospectiveRatingCount = inputs.prospectiveRatings.reduce(reduceSum, 0);
   const combinedRatingCount = combinedRatings.reduce(reduceSum, 0);
 
   const ratingsPercentage = ratingCount / mauPool;
@@ -63,6 +64,7 @@ export function calculateSimulation(
   return {
     combinedRatings,
     ratingCount,
+    prospectiveRatingCount,
     combinedRatingCount,
     ratingsPercentage,
     combinedRatingsPercentage,
