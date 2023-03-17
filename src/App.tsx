@@ -96,7 +96,7 @@ export default function App() {
   );
 
   return (
-    <div className="flex flex-col p-5 sm:p-10">
+    <div className="flex flex-col pt-10 p-5 sm:p-10 max-w-[960px] ml-auto mr-auto">
       <h1 className="text-3xl font-bold mb-10">Qvik App Ratings Simulator</h1>
       <p className="mb-6">
         This tool allows you to explore the possible changes in an app's rating
