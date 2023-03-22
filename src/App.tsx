@@ -147,11 +147,8 @@ export default function App() {
             </div>
             <div className="w-full sm:w-3/5">
               <StackedBarChart
-                options={{
-                  label: '',
-                  datasets: [...originalDatasets].reverse(),
-                  renderDatasetLabel,
-                }}
+                datasets={[...originalDatasets].reverse()}
+                renderDatasetLabel={renderDatasetLabel}
               />
             </div>
           </div>
@@ -177,11 +174,8 @@ export default function App() {
             </div>
             <div className="w-full sm:w-3/5">
               <StackedBarChart
-                options={{
-                  label: '',
-                  datasets: [...prospectiveDatasets].reverse(),
-                  renderDatasetLabel,
-                }}
+                datasets={[...prospectiveDatasets].reverse()}
+                renderDatasetLabel={renderDatasetLabel}
               />
             </div>
           </div>

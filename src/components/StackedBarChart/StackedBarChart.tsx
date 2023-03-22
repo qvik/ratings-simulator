@@ -22,20 +22,18 @@ type StackedBarChartDataSet = {
   value: ChartData[];
 };
 
-type StackedBarChartOptions = {
-  label: string;
+type StackedBarChartProps = {
   datasets: StackedBarChartDataSet[];
   renderDatasetLabel?: (label: string) => JSX.Element;
 };
 
-type StackedBarChartProps = {
-  options: StackedBarChartOptions;
-};
-
-export default function StackedBarChart({ options }: StackedBarChartProps) {
+export default function StackedBarChart({
+  datasets,
+  renderDatasetLabel,
+}: StackedBarChartProps) {
   return (
     <div className="min-h-[96px]">
-      {options.datasets.map((dataset) => (
+      {datasets.map((dataset) => (
         <div key={dataset.label} className="pb-2 pl-[100px] pt-2 relative">
           <div className="h-[6px] overflow-hidden flex flex-row relative bg-gray-100">
             {dataset.value.map(({ color, value }, index) => (
@@ -53,8 +51,8 @@ export default function StackedBarChart({ options }: StackedBarChartProps) {
             ))}
           </div>
           <div className="w-[80px] absolute left-0 text-right top-0">
-            {options.renderDatasetLabel
-              ? options.renderDatasetLabel(dataset.label)
+            {renderDatasetLabel
+              ? renderDatasetLabel(dataset.label)
               : dataset.label}
           </div>
         </div>
