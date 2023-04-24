@@ -101,13 +101,13 @@ export default function App() {
       <p className="mb-6">
         This tool allows you to explore the possible changes in an app's rating
         based on acquiring more prospective ratings. Enter the existing ratings
-        in to the first column, then use the second column to add the number of
-        new, prospective ratings to see how the distribution and average of
-        ratings changes.{' '}
+        in to the first column, then enter the number of new prospective ratings
+        in the second column to see the change in your rating distribution and
+        average rating.
       </p>
       <p className="mb-6">
-        Read more about how you activate users to leave positive ratings from
-        Qvik blog:{' '}
+        Read more about prompting users to leave positive ratings from the Qvik
+        blog:{' '}
         <a
           className="underline"
           href="https://qvik.com/news/how-many-stars-does-your-app-have/"
@@ -115,8 +115,16 @@ export default function App() {
         >
           How many stars does your app have?
         </a>
-        {/* {' '}
-        and TODO: next post */}
+      </p>
+      <p className="mb-6">
+        This tool was introduced as a part of a Qvik News post:{' '}
+        <a
+          className="underline"
+          href="https://qvik.com/news/app-store-rating-hacks-2023/"
+          target={'_blank'}
+        >
+          App Store Rating Hacks 2023
+        </a>
       </p>
       <div className={'flex flex-col mb-2 max-w-[420px]'}>
         <RatingsForm
